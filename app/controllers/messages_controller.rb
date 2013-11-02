@@ -3,14 +3,18 @@ require 'streamer/sse'
 class MessagesController < ApplicationController
   include ActionController::Live
 
+
   def index
     @messages = Message.all
   end
 
   def create
     response.headers['Content-Type'] = 'text/javascript'
-    @message = params.require(:message).permit(:name, :content)
-    $redis.publish('messages.create', @message.to_json)
+    message_params = params.require(:message).permit(:content)
+    message_params[:username] = current_user.username
+    @message = Message.create(message_params)
+    current_user.messages << @message
+    $redis.publish('messages.create', {message: @message.attributes, username: current_user.username}.to_json)
     render nothing: true
   end
 

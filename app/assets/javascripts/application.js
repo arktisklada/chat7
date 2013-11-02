@@ -14,12 +14,3 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
-
-jQuery(document).ready(function() {
-  var source = new EventSource('/messages/events'),
-      message;
-  source.addEventListener('messages.create', function (e) {
-    message = JSON.parse(e.data);
-    $("#messages").append($('<li>').text(message.name + ': ' + message.content));
-  });
-});
