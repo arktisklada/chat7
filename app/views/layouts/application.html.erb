@@ -1,18 +1,91 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Chat7</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7 ]> <html class="ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie9" lang="en"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
 
-  <div id="container">
+    <!-- Uncomment to make IE8 render like IE7 -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=7" /> -->
 
-    <%= yield %>
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  </div>
+    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
 
-</body>
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/custom.modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+
+
+
+
+
+<nav class="top-bar" data-options="is_hover:false" style="">
+  <ul class="title-area">
+    <!-- Title Area -->
+    <li class="name">
+      <h1><a href="#">Chat 7</a></h1>
+    </li>
+    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+  </ul>
+
+  
+  <section class="top-bar-section" style="left: 0%;">
+
+    <!-- Right Nav Section -->
+    <ul class="right">
+      <% if user_signed_in? %>
+        <li class="has-dropdown"><a href="#"><%= current_user.username %></a>
+
+          <ul class="dropdown"><li class="title back js-generated"><h5><a href="#">Back</a></h5></li>
+            <li class=""><a href="#" class="">Dropdown Level 1a</a>
+            <li class="divider"></li>
+            <li class=""><%= link_to "Sign Out", destroy_user_session_path, :method => :delete %>
+            <li class="divider"></li>
+          </ul>
+        </li>
+      <% else %>
+        <li class=""><%= link_to "Sign In", new_user_session_path %></li>
+            <li class="divider"></li>
+        <li class=""><%= link_to "Sign Up", new_user_registration_path %></li>
+      <% end %>
+    </ul>
+  </section>
+</nav>
+
+
+
+
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <% if flash[:error] %>
+            <div data-alert="" class="alert-box error"><%= flash[:error] %><a href="" class="close">×</a></div>
+          <% end %>
+    
+          <%if flash[:notice] %>
+            <div data-alert="" class="alert-box"><%= flash[:notice] %><a href="" class="close">×</a></div>
+          <% end %>
+    
+          <%if flash[:alert] %>
+            <div data-alert="" class="alert-box alert"><%= flash[:alert] %><a href="" class="close">x</a></div>
+          <% end %>
+        </div>
+    
+        <div class="twelve columns">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+    
+    <%= javascript_include_tag "application", controller_name %>
+  </body>
 </html>
