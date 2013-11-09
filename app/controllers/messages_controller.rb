@@ -15,7 +15,11 @@ class MessagesController < ApplicationController
     @message = Message.create(message_params)
     current_user.messages << @message
     $redis.publish('messages.create', {message: @message.attributes, username: current_user.username}.to_json)
-    render nothing: true
+    if request.xhr?
+      render js: '$("#message_content").val("")'
+    else
+      render nothing: true
+    end
   end
 
   def events
