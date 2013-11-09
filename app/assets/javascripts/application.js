@@ -17,3 +17,32 @@
 // require_tree .
 
 $(document).foundation();
+
+$(function() {
+  $(window).resize(function() {
+    adjustFullHeight();
+  });
+  adjustFullHeight();
+});
+
+function adjustFullHeight() {
+  $window = $(window);
+  $sticky_footer = $('.sticky-footer');
+  $('.full-height').each(function() {
+    $this = $(this);
+    var height = $window.height() - $this.offset().top - 80;
+    if($sticky_footer.length > 0) {
+      height - $sticky_footer.height() - 20;
+    }
+      console.log(height);
+    $('.full-height').css('height', height);
+  });
+}
+
+function scrollMessages(value) {
+  $messages = $('#messages');
+  if(value < 0) {
+    value = $messages.height();
+  }
+  $messages.scrollTop(value);
+}

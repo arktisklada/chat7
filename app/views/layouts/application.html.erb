@@ -79,12 +79,27 @@
             <div data-alert="" class="alert-box alert"><%= flash[:alert] %><a href="" class="close">x</a></div>
           <% end %>
         </div>
-    
+      </div>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
         <div class="twelve columns">
           <%= yield %>
         </div>
       </div>
     </div>
+
+    <% if content_for? :sticky_footer %>
+      <div class="container sticky-footer">
+        <div class="row">
+          <div class="twelve columns">
+            <%= yield :sticky_footer %>
+          </div>
+        </div>
+      </div>
+    <% end %>
     
     <%= javascript_include_tag "application", controller_name %>
   </body>

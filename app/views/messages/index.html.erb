@@ -1,12 +1,27 @@
-Welcome to Chat7 <%= current_user.username %>
+<div class="full-height with-footer" id="messages">
 
-<ul id="messages">
-  <% @messages.each do |m| %>
-    <li><%= m.username %>: <%= m.content %></li>
+    <% @messages.each do |m| %>
+      <div class="message-row">
+        <div class="message-left">
+          <div class="message-user"><%= m.username %>:</div>
+          <div class="message-date"><%= date_format m.created_at %></div>
+        </div>
+        <div class="message-content"><%= m.content %></div>
+        <div class="clear"></div>
+      </div>
+    <% end %>
+
+</div>
+
+<% content_for :sticky_footer do %>
+  <%= form_for Message.new, remote: true do |f| %>
+    <div class="row">
+      <div class="small-9 columns">
+        <%= f.text_field :content %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.submit "Send", id: "message_submit", class: "button" %>
+      </div>
+    </div>
   <% end %>
-</ul>
-
-<%= form_for Message.new, remote: true do |f| %>
-  <%= f.text_field :content %>
-  <%= f.submit "Send", id: "message_submit", class: "button" %>
 <% end %>

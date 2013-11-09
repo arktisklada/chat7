@@ -1,11 +1,11 @@
-ul {
-  list-style-type: none;
-}
-
 html, body {
   color: #333333;
   font-family: 'Open Sans', Futura, Helvetica, Arial, sans-serif;
   font-size: 16px;
+}
+
+.clear {
+  clear: both;
 }
 
 #container {
@@ -13,4 +13,56 @@ html, body {
 
 .devise-row {
   margin-bottom: 0.875em;
+}
+
+.full-height {
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  overflow: auto;
+
+  &.with-footer {
+    margin-bottom: 3.5em;
+  }
+}
+
+.sticky-footer {
+  bottom: 0px;
+  height: 3.5em;
+  left: 0px;
+  position: fixed;
+  right: 0px;
+}
+
+
+#messages {
+  border: 1px solid black;
+
+  .message-row {
+    line-height: 2em;
+    padding: 5px;
+
+    .message-left {
+      float: left;
+      width: 10em;
+
+      .message-user {
+      }
+      .message-date {
+        font-style: italic;
+        font-size: 0.875em;
+      }
+    }
+    .message-content {
+      float: left;
+      margin-right: -10em;
+      width: 100%;
+    }
+  }
+}
+
+
+#message_content {
+  font-size: 1.125em;
+  height: 2.375em;
 }
