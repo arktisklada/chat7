@@ -13,36 +13,42 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
+//= require handlebars
 // require turbolinks
 // require_tree .
 
 $(document).foundation();
 
+
+var $window;
+var $messages;
+
 $(function() {
-  $(window).resize(function() {
+  $window = $(window);
+  $messages = $('#messages');
+
+  $window.resize(function() {
     adjustFullHeight();
   });
   adjustFullHeight();
 });
 
 function adjustFullHeight() {
-  $window = $(window);
-  $sticky_footer = $('.sticky-footer');
+  var $sticky_footer = $('.sticky-footer');
   $('.full-height').each(function() {
     $this = $(this);
     var height = $window.height() - $this.offset().top - 80;
     if($sticky_footer.length > 0) {
       height - $sticky_footer.height() - 20;
     }
-      console.log(height);
-    $('.full-height').css('height', height);
+    $this.css('height', height);
   });
 }
 
 function scrollMessages(value) {
-  $messages = $('#messages');
   if(value < 0) {
-    value = $messages.height();
+    $children = $messages.children();
+    value = ($children.height() * $children.length) + $messages.height();
   }
   $messages.scrollTop(value);
 }

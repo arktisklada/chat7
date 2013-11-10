@@ -5,8 +5,14 @@ class MessagesController < ApplicationController
 
 
   def index
-    @messages = Message.all
+    @messages = Message.desc(:created_at).limit(20)
+    if request.xhr?
+      offset = (params[:page].to_i - 1) * 20 || 0
+      @messages = Message.desc(:created_at).limit(20).offset(offset)
+      render :json => @messages
+    end
   end
+
 
   def create
     response.headers['Content-Type'] = 'text/javascript'
@@ -33,8 +39,10 @@ class MessagesController < ApplicationController
     end
     render nothing: true
   rescue IOError
+    puts "IO Error"
     # Client disconnected
   ensure
+    puts "Quit"
     redis.quit
     sse.close
   end
