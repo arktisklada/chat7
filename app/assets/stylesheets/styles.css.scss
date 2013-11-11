@@ -1,6 +1,7 @@
 $darkGrey: #333333;
 $mediumGrey: #999999;
 $lightGrey: #cccccc;
+$extraLightGrey: #dddddd;
 
 
 html, body {
@@ -41,12 +42,13 @@ html, body {
 
 
 #messages {
-  border: 1px solid black;
+  border: 1px solid $mediumGrey;
+  overflow-x: hidden;
 
   .message-row {
-    border-top: 1px solid $lightGrey;
-    border-bottom: 1px solid $mediumGrey;
-    line-height: 2em;
+    border-top: 1px solid $extraLightGrey;
+    border-bottom: 1px solid $lightGrey;
+    line-height: 1.2em;
     padding: 5px;
 
     .message-left {
@@ -56,8 +58,9 @@ html, body {
       .message-user {
       }
       .message-date {
+        color: $mediumGrey;
         font-style: italic;
-        font-size: 0.875em;
+        font-size: 0.75em;
       }
     }
     .message-content {
@@ -66,6 +69,21 @@ html, body {
       width: 100%;
     }
   }
+}
+
+.row .columns .form-input-container,
+.form-input-container {
+  float: none;
+  margin-right: 105px;
+  padding-right: 0;
+  position: relative;
+  width: inherit;
+}
+.row .columns .form-submit-container,
+.form-submit-container {
+  float: right;
+  padding-left: 0;
+  width: 105px;
 }
 
 

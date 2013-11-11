@@ -3,9 +3,7 @@ $(function() {
 
   Handlebars.registerHelper('dateFormat', function(text) {
     // text = Handlebars.Utils.escapeExpression(text);
-    console.log(text);
     var date = new Date(text);
-    console.log(date);
     var formatted = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
 
     return new Handlebars.SafeString(formatted);
