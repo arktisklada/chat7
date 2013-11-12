@@ -5,12 +5,7 @@ class MessagesController < ApplicationController
     page = params[:page].to_i || 1
     puts params
     if request.xhr?
-      if page == 1
-        @messages = Message.desc(:created_at)
-      else
-        @messages = Message.asc(:created_at)
-      end
-      @messages = @messages.paginate(page: page, limit: 20)
+      @messages = Message.desc(:created_at).paginate(page: page, limit: 20)
       render :json => @messages.to_a.reverse
     end
   end
