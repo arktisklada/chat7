@@ -5,7 +5,7 @@ gem 'rails', '4.0.0'
 
 gem 'bson_ext'
 gem 'mongoid', '~> 4', git: 'git@github.com:mongoid/mongoid'
-
+gem 'will_paginate_mongoid'
 gem 'redis'
 
 

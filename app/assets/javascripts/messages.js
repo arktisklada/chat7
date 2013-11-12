@@ -1,4 +1,5 @@
 var source;
+var message_page = 1;
 
 $(function() {
   scrollMessages(-1);
@@ -30,10 +31,27 @@ $(function() {
 
 
   $.get('/messages', {page: 1}, function(data) {
+    message_page += 1;
     $.each(data, function(index, value) {
       $messages.append(message_template(value));
     });
     scrollMessages(-1);
+  });
+
+  $messages.on('scroll', function() {
+    var $this = $(this);
+    var messages_height = $messages.children().length * 50;
+    if($this.scrollTop() == 0) {
+      $.get('/messages', {page: message_page}, function(data) {
+        message_page += 1;
+        $.each(data, function(index, value) {
+          $messages.prepend(message_template(value));
+        });
+        var new_height = ($messages.children().length * 50) - messages_height;
+        console.log(new_height);
+        scrollMessages(new_height);
+      });
+    }
   });
 
   $window.on('beforeunload unload', function() {

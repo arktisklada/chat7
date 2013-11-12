@@ -2,11 +2,16 @@ class MessagesController < ApplicationController
   include ActionController::Live
 
   def index
-    @messages = Message.desc(:created_at).limit(20)
+    page = params[:page].to_i || 1
+    puts params
     if request.xhr?
-      offset = (params[:page].to_i - 1) * 20 || 0
-      @messages = Message.desc(:created_at).limit(20).offset(offset).to_a
-      render :json => @messages.reverse
+      if page == 1
+        @messages = Message.desc(:created_at)
+      else
+        @messages = Message.asc(:created_at)
+      end
+      @messages = @messages.paginate(page: page, limit: 20)
+      render :json => @messages.to_a.reverse
     end
   end
 
@@ -28,7 +33,7 @@ class MessagesController < ApplicationController
 
   def events
     response.headers['Content-Type'] = 'text/event-stream'
-    
+
     redis ||= Redis.new
     redis.subscribe(['messages.create', 'heart']) do |on|
       on.message do |event, data|
