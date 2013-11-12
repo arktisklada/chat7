@@ -15,6 +15,7 @@
 //= require foundation
 //= require handlebars
 // require turbolinks
+// require_self
 // require_tree .
 
 $(document).foundation();

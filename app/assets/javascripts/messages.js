@@ -1,3 +1,5 @@
+var source;
+
 $(function() {
   scrollMessages(-1);
 
@@ -12,10 +14,10 @@ $(function() {
   var message_template = Handlebars.compile($('#message-template').html());
 
 
-  var source = new EventSource('/messages/events');
+  source = new EventSource('/messages/events');
   var message;
 
-  source.addEventListener('messages.create', function (e) {
+  source.addEventListener('messages.create', function(e) {
     data = JSON.parse(e.data);
     var message_data = {
       username: data.username,
@@ -32,5 +34,9 @@ $(function() {
       $messages.append(message_template(value));
     });
     scrollMessages(-1);
+  });
+
+  $window.on('beforeunload unload', function() {
+    source.close();
   });
 });
