@@ -8,11 +8,7 @@ class ApplicationController < ActionController::Base
     options.each do |key, value|
       response.stream.write("#{key}: #{value}\n")
     end
-    if object.is_a? String
-      response.stream.write("#{object}\n")
-    else
-      response.stream.write("data: #{object}\n\n")
-    end
+    response.stream.write("data: #{object}\n\n")
   end
 
   def close_stream(redis)

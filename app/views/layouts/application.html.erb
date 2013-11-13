@@ -39,9 +39,9 @@
 
   
   <section class="top-bar-section" style="left: 0%;">
-
     <!-- Right Nav Section -->
     <ul class="right">
+      <li id="connection-status" class="good"></li>
       <% if user_signed_in? %>
         <li class="has-dropdown"><a href="#"><%= current_user.username %></a>
 

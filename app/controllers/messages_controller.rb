@@ -32,14 +32,15 @@ class MessagesController < ApplicationController
     redis ||= Redis.new
     redis.subscribe(['messages.create', 'heart']) do |on|
       on.message do |event, data|
-        if event == 'messages.create'
-          write_stream(data, event: event)
-        elsif event == 'heart'
-          response.stream.write("event: heart\ndata: beat\n\n")
+        case event
+          when 'messages.create'
+            write_stream(data, event: event)
+          when 'heart'
+            response.stream.write("event: heart\ndata: beat\n\n")
         end
       end
     end
-    # render nothing: true
+    render nothing: true
 
   rescue IOError
     # Client disconnected
