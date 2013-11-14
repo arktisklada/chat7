@@ -1,6 +1,9 @@
 class MessagesController < ApplicationController
   include ActionController::Live
 
+  before_filter :authenticate_user!
+  
+
   def index
     page = params[:page].to_i || 1
     puts params

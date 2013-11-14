@@ -57,7 +57,6 @@ $(function() {
           $messages.prepend(app.message_template(value));
         });
         var new_height = ($messages.children().length * 50) - messages_height;
-        console.log(new_height);
         scrollMessages(new_height);
       });
     }
@@ -74,11 +73,12 @@ $(function() {
 
 
 function openStream() {
-  $connection_status = $('#connection-status');
-  console.log($connection_status);
   source = new EventSource('/messages/events');
+  source.onopen = function() {
+    connectionStatus(true);
+  }
   source.addEventListener('messages.create', function(e) {
-    $connection_status.removeClass('bad');
+    connectionStatus(true);
     data = JSON.parse(e.data);
     var message_data = {
       username: data.username,
@@ -87,11 +87,27 @@ function openStream() {
     }
     $messages.append(app.message_template(message_data));
     scrollMessages(-1);
+    connectionStatus(true);
   });
   source.addEventListener('error', function(e) {
-    $connection_status.addClass('bad');
+    connectionStatus(false);
   });
 }
 function closeStream() {
   source.close();
+}
+
+function connectionStatus(status) {
+  $connection_status = $('#connection-status');
+  if(status === true) {
+    $connection_status.removeClass('bad');
+    $connection_status.addClass('good');
+    $connection_status.attr('title', 'Connected.')
+  } else if(status === false) {
+    $connection_status.removeClass('good');
+    $connection_status.addClass('bad');
+    $connection_status.attr('title', 'Not connected!')
+  } else {
+    return $connection_status.hasClass('good');
+  }
 }

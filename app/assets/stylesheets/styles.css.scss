@@ -18,11 +18,12 @@ html, body {
 }
 
 #connection-status {
-  height: 15px;
-  padding-top: 15px;
+  background-color: #666666;
+  height: 100%;
+  padding-top: 45px;
   width: 15px;
 }
-#connection-status {
+#connection-status.good {
   background-color: #00dd00;
 }
 #connection-status.bad {
