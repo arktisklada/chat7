@@ -39,14 +39,6 @@ $(function() {
   app.message_template = Handlebars.compile($('#message-template').html());
 
 
-  // $.get('/messages', {page: 1}, function(data) {
-  //   app.message_page += 1;
-  //   $.each(data, function(index, value) {
-  //     $messages.prepend(app.message_template(value));
-  //   });
-  //   scrollMessages(-1);
-  // });
-
   $messages.on('scroll', function() {
     var $this = $(this);
     var messages_height = $messages.children().length * 50;
@@ -80,6 +72,11 @@ function openStream() {
   source = new EventSource('/messages/events');
   source.onopen = function() {
     connectionStatus(true);
+    $.ajax({
+      url: '/messages/join',
+      async: false,
+      method: 'GET'
+    });
   }
   source.addEventListener('messages.create', function(e) {
     connectionStatus(true);
@@ -93,8 +90,18 @@ function openStream() {
     scrollMessages(-1);
     connectionStatus(true);
   });
+
+  $list = $('#member-list-ul');
   source.addEventListener('user.list', function(e) {
-    console.log(e);
+    data = JSON.parse(e.data);
+    $list.html('');
+    $.each(data, function(i, user) {
+      $list.append('<li><a href="">' + user + '</a></li>')
+    });
+    $list.append('<li class="divider">')
+    $list.find('a').on('click', function(e) {
+      e.preventDefault();
+    });
   })
   source.addEventListener('error', function(e) {
     connectionStatus(false);
@@ -102,18 +109,23 @@ function openStream() {
 }
 function closeStream() {
   source.close();
+  $.ajax({
+    url: '/messages/leave',
+    async: false,
+    method: 'GET'
+  });
 }
 
 function connectionStatus(status) {
   $connection_status = $('#connection-status');
   if(status === true) {
-    $connection_status.removeClass('bad');
-    $connection_status.addClass('good');
-    $connection_status.attr('title', 'Connected.')
+    $connection_status.removeClass('bad')
+      .addClass('good')
+      .attr('title', 'Connected.');
   } else if(status === false) {
-    $connection_status.removeClass('good');
-    $connection_status.addClass('bad');
-    $connection_status.attr('title', 'Not connected!')
+    $connection_status.removeClass('good')
+      .addClass('bad')
+      .attr('title', 'Not connected!');
   } else {
     return $connection_status.hasClass('good');
   }

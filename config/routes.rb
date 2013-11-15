@@ -6,7 +6,11 @@ Chat::Application.routes.draw do
 
   authenticate do
     resources :messages do
-      collection { get :events }
+      collection {
+        get :events
+        get :join
+        get :leave
+      }
     end
   end
 

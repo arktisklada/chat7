@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   def publish_user_join
     users = JSON.parse($redis.get('users')) rescue []
-    users.push(current_user.username)
+    users.push(current_user.username).uniq!
     $redis.set('users', users.to_json)
     $redis.publish('user.list', {users: users}.to_json)
   end

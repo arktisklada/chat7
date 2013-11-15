@@ -3,7 +3,6 @@ class MessagesController < ApplicationController
 
 
   def index
-    puts user_signed_in?
     page = params[:page].to_i || 1
     puts params
     if request.xhr?
@@ -28,6 +27,16 @@ class MessagesController < ApplicationController
     end
   end
 
+  def join
+    publish_user_join
+    render json: true
+  end
+
+  def leave
+    publish_user_leave
+    render json: true
+  end
+
   def events
     response.headers['Content-Type'] = 'text/event-stream'
 
@@ -42,7 +51,6 @@ class MessagesController < ApplicationController
         end
       end
     end
-    publish_user_join
     render nothing: true
 
   rescue IOError
