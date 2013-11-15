@@ -4,6 +4,21 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
 
+  def publish_user_join
+    users = JSON.parse($redis.get('users')) rescue []
+    users.push(current_user.username)
+    $redis.set('users', users.to_json)
+    $redis.publish('user.list', {users: users}.to_json)
+  end
+
+  def publish_user_leave
+    users = JSON.parse($redis.get('users')) rescue []
+    users.delete(current_user.username)
+    $redis.set('users', users.to_json)
+    $redis.publish('user.list', {users: users}.to_json)
+  end
+
+
   def write_stream(object, options={})
     options.each do |key, value|
       response.stream.write("#{key}: #{value}\n")
@@ -14,6 +29,7 @@ class ApplicationController < ActionController::Base
   def close_stream(redis)
     redis.quit
     response.stream.close
+    publish_user_leave
   end
 
 end

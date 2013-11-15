@@ -39,13 +39,13 @@ $(function() {
   app.message_template = Handlebars.compile($('#message-template').html());
 
 
-  $.get('/messages', {page: 1}, function(data) {
-    app.message_page += 1;
-    $.each(data, function(index, value) {
-      $messages.append(app.message_template(value));
-    });
-    scrollMessages(-1);
-  });
+  // $.get('/messages', {page: 1}, function(data) {
+  //   app.message_page += 1;
+  //   $.each(data, function(index, value) {
+  //     $messages.prepend(app.message_template(value));
+  //   });
+  //   scrollMessages(-1);
+  // });
 
   $messages.on('scroll', function() {
     var $this = $(this);
@@ -61,6 +61,10 @@ $(function() {
       });
     }
   });
+
+  setTimeout(function() {
+    $messages.trigger('scroll');
+  }, 1);
 
 
   openStream();
@@ -89,6 +93,9 @@ function openStream() {
     scrollMessages(-1);
     connectionStatus(true);
   });
+  source.addEventListener('user.list', function(e) {
+    console.log(e);
+  })
   source.addEventListener('error', function(e) {
     connectionStatus(false);
   });
