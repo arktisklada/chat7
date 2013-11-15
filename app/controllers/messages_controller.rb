@@ -7,8 +7,8 @@ class MessagesController < ApplicationController
     page = params[:page].to_i || 1
     puts params
     if request.xhr?
-      @messages = Message.desc(:created_at).paginate(page: page, limit: 20)
-      render :json => @messages.to_a
+      messages = Message.desc(:created_at).paginate(page: page, limit: 20)
+      render :json => messages.to_a
     end
   end
 
@@ -16,10 +16,10 @@ class MessagesController < ApplicationController
     response.headers['Content-Type'] = 'text/javascript'
     message_params = params.require(:message).permit(:content)
     message_params[:username] = current_user.username
-    @message = Message.create(message_params)
+    message = Message.create(message_params)
     current_user.messages << @message
 
-    $redis.publish('messages.create', {message: @message.attributes, username: current_user.username}.to_json)
+    $redis.publish('messages.create', {message: message.attributes, username: current_user.username}.to_json)
 
     if request.xhr?
       render js: '$("#message_content").val("")'
@@ -32,16 +32,17 @@ class MessagesController < ApplicationController
     response.headers['Content-Type'] = 'text/event-stream'
 
     redis ||= Redis.new
-    redis.subscribe(['messages.create', 'heart']) do |on|
+    redis.subscribe(['heart', 'messages.create', 'user.join', 'user.leave', 'user.list']) do |on|
       on.message do |event, data|
-        case event
-          when 'messages.create'
-            write_stream(data, event: event)
-          when 'heart'
-            response.stream.write("event: heart\ndata: beat\n\n")
+        puts event
+        if event == 'heart'
+          response.stream.write("event: heart\ndata: beat\n\n")
+        else
+          write_stream(data, event: event)
         end
       end
     end
+    publish_user_join
     render nothing: true
 
   rescue IOError
