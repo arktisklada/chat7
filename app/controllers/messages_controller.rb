@@ -43,7 +43,6 @@ class MessagesController < ApplicationController
     redis ||= Redis.new
     redis.subscribe(['heart', 'messages.create', 'user.join', 'user.leave', 'user.list']) do |on|
       on.message do |event, data|
-        puts event
         if event == 'heart'
           response.stream.write("event: heart\ndata: beat\n\n")
         else

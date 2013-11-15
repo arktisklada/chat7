@@ -7,8 +7,8 @@ var hour24 = true;
 
 
 $(function() {
-  scrollMessages(-1);
 
+  // Register Handlebars dateFormat helper
   Handlebars.registerHelper('dateFormat', function(text) {
     // text = Handlebars.Utils.escapeExpression(text);
     var date = new Date(text);
@@ -17,6 +17,7 @@ $(function() {
     return new Handlebars.SafeString(formatted);
   });
 
+  // Register Handlebars timeFormat helper
   Handlebars.registerHelper('timeFormat', function(text) {
     // text = Handlebars.Utils.escapeExpression(text);
     var date = new Date(text);
@@ -36,9 +37,11 @@ $(function() {
     return new Handlebars.SafeString(formatted);
   });
 
+  // compile and cache message template
   app.message_template = Handlebars.compile($('#message-template').html());
 
 
+  // add scroll event handler for infinite history scroll
   $messages.on('scroll', function() {
     var $this = $(this);
     var messages_height = $messages.children().length * 50;
@@ -54,13 +57,16 @@ $(function() {
     }
   });
 
+  // populate the history with first page
   setTimeout(function() {
     $messages.trigger('scroll');
   }, 1);
 
 
+  // initiate the event stream
   openStream();
 
+  // before we leave the page, close the stream and leave the room
   $window.on('beforeunload unload', function() {
     closeStream();
   });
@@ -69,16 +75,22 @@ $(function() {
 
 
 function openStream() {
+  // create the HTML5 EventSource for incoming events
   source = new EventSource('/messages/events');
+  // when the connection is established:
   source.onopen = function() {
+    // connection status is good
     connectionStatus(true);
+    // join the room (add username to published user list)
     $.ajax({
       url: '/messages/join',
       async: false,
       method: 'GET'
     });
   }
+  // when we receive a message:
   source.addEventListener('messages.create', function(e) {
+    // connection status is good
     connectionStatus(true);
     data = JSON.parse(e.data);
     var message_data = {
@@ -88,10 +100,13 @@ function openStream() {
     }
     $messages.append(app.message_template(message_data));
     scrollMessages(-1);
+    // connection status is good
     connectionStatus(true);
   });
 
+  // cache the member list ul selector
   $list = $('#member-list-ul');
+  // when we receive a new user list:
   source.addEventListener('user.list', function(e) {
     data = JSON.parse(e.data);
     $list.html('');
@@ -103,7 +118,9 @@ function openStream() {
       e.preventDefault();
     });
   })
+  // when we have an error:
   source.addEventListener('error', function(e) {
+    // connection status is bad
     connectionStatus(false);
   });
 }
