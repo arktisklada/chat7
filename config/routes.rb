@@ -4,8 +4,10 @@ Chat::Application.routes.draw do
     :registrations => "devise_overrides/registrations"
   }
 
-  resources :messages do
-    collection { get :events }
+  authenticate do
+    resources :messages do
+      collection { get :events }
+    end
   end
 
   root to: 'home#index'

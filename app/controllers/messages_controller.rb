@@ -1,15 +1,14 @@
 class MessagesController < ApplicationController
   include ActionController::Live
 
-  before_filter :authenticate_user!
-  
 
   def index
+    puts user_signed_in?
     page = params[:page].to_i || 1
     puts params
     if request.xhr?
       @messages = Message.desc(:created_at).paginate(page: page, limit: 20)
-      render :json => @messages.to_a.reverse
+      render :json => @messages.to_a
     end
   end
 
@@ -53,4 +52,5 @@ class MessagesController < ApplicationController
     puts "Quit"
     close_stream(redis)
   end
+
 end
