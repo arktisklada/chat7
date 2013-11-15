@@ -32,10 +32,6 @@ $(function() {
     adjustFullHeight();
   });
   adjustFullHeight();
-
-  // $('form#new_message').on('ajax:success', function(e, data, status, xhr) {
-  //   connectionStatus(true);
-  // });
 });
 
 
