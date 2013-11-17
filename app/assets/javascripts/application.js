@@ -18,11 +18,17 @@
 // require_self
 // require_tree .
 
+
 $(document).foundation();
 
 
 var $window;
 var $messages;
+
+var source;
+var hour24 = true;
+
+
 
 $(function() {
   $window = $(window);

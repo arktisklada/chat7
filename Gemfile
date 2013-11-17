@@ -26,17 +26,17 @@ gem 'uglifier', '>= 1.3.0'
 
 
 group :test do
-  gem 'faker'
-  gem 'capybara'
-  gem 'database_cleaner'
-  gem 'launchy'
+  # gem 'faker'
+  # gem 'capybara'
+  # gem 'database_cleaner'
+  # gem 'launchy'
 end
 group :development, :test do
-  gem 'annotate'
+  # gem 'annotate'
 
-  gem 'rspec-rails'
+  # gem 'rspec-rails'
   # gem 'factory_girl_rails'
-  gem 'guard-rspec'
+  # gem 'guard-rspec'
 end
 
 
