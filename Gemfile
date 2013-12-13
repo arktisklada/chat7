@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails', '4.0.1'
 
 gem 'bson_ext'
 gem 'mongoid', '~> 4', git: 'git@github.com:mongoid/mongoid'
@@ -17,10 +17,10 @@ gem 'devise'
 
 
 # Asset-related gems
-gem 'sass-rails',   '~> 4.0.0'
-gem 'coffee-rails', '~> 4.0.0'
+gem 'sass-rails',   '~> 4.0.1'
+gem 'coffee-rails', '~> 4.0.1'
 # gem 'compass-rails'
-gem 'zurb-foundation'#, '~> 4.0.0'
+gem 'zurb-foundation', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 
 
