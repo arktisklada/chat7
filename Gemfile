@@ -6,9 +6,8 @@ gem 'rails', '4.0.1'
 gem 'bson_ext'
 gem 'mongoid', '~> 4', git: 'git@github.com:mongoid/mongoid'
 gem 'will_paginate_mongoid'
+
 gem 'redis'
-
-
 # Use puma as the app server
 gem 'puma'
 
@@ -26,16 +25,18 @@ gem 'uglifier', '>= 1.3.0'
 
 
 group :test do
-  # gem 'faker'
-  # gem 'capybara'
-  # gem 'database_cleaner'
+  gem 'capybara'
+  gem 'database_cleaner'
   # gem 'launchy'
+  gem 'rspec-rails'
+  gem 'selenium-webdriver'
 end
 group :development, :test do
+  gem 'faker'
   # gem 'annotate'
 
   # gem 'rspec-rails'
-  # gem 'factory_girl_rails'
+  gem 'factory_girl_rails'
   # gem 'guard-rspec'
 end
 

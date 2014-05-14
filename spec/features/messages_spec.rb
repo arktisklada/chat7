@@ -1,20 +1,23 @@
 require 'spec_helper'
 require 'benchmark'
 
-describe "Live Streaming" do
-  it "tests performance", :js => true do
+describe "Messaging" do
+  let(:user) { FactoryGirl.create(:user) }
 
-    n = ENV["TIMES"] ? ENV["TIMES"].to_i : 1000
-    Benchmark.bm do |x|
-      visit "/"
-      fill_in :message_name, :with => "John"
-      fill_in :message_content, :with => "A little test"
+  it "tests authorized page" do
+    sign_in user.email, user.password
 
-      x.report "speed test" do
-        n.times do
-          click_button "message_submit"
-        end
-      end
-    end
+    visit "/messages"
+    expect(page).to have_content('Members')
+  end
+
+  it "sends a message" do
+    sign_in user.email, user.password
+
+    message = "A little test"
+
+    visit "/messages"
+    fill_in :message_content, :with => message
+    click_button "message_submit"
   end
 end
